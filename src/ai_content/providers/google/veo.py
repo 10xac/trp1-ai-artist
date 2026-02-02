@@ -92,21 +92,16 @@ class GoogleVeoProvider:
 
         client = self._get_client()
 
-        model = (
-            self.settings.video_fast_model
-            if use_fast_model
-            else self.settings.video_model
-        )
+        model = self.settings.video_fast_model if use_fast_model else self.settings.video_model
 
         logger.info(f"🎬 Veo: Generating video ({aspect_ratio})")
         logger.debug(f"   Prompt: {prompt[:50]}...")
         logger.debug(f"   Model: {model}")
 
         try:
-            # Build config
-            config = types.GenerateVideoConfig(
-                aspect_ratio=aspect_ratio,
-                person_generation=person_generation,
+            # Build config (using only supported parameters)
+            config = types.GenerateVideosConfig(
+                aspectRatio=aspect_ratio,
             )
 
             # Generate
@@ -114,7 +109,7 @@ class GoogleVeoProvider:
                 # Image-to-video
                 image_data = await self._fetch_image(first_frame_url)
                 image = types.Image(image_bytes=image_data)
-                operation = await client.aio.models.generate_video(
+                operation = await client.aio.models.generate_videos(
                     model=model,
                     prompt=prompt,
                     image=image,
@@ -122,7 +117,7 @@ class GoogleVeoProvider:
                 )
             else:
                 # Text-to-video
-                operation = await client.aio.models.generate_video(
+                operation = await client.aio.models.generate_videos(
                     model=model,
                     prompt=prompt,
                     config=config,
