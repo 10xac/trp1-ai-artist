@@ -266,7 +266,7 @@ Let the music breathe with natural feel"""
         result.metadata["style"] = style
 
         if providers is None:
-            providers = list(ProviderRegistry.list_music())
+            providers = list(ProviderRegistry.list_music_providers())
 
         logger.info(f"🔬 Provider Comparison: {style}")
         logger.info(f"   Providers: {', '.join(providers)}")

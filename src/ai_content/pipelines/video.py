@@ -187,7 +187,7 @@ class VideoPipeline:
         result.metadata["style"] = style
 
         if providers is None:
-            providers = list(ProviderRegistry.list_video())
+            providers = list(ProviderRegistry.list_video_providers())
 
         logger.info(f"🔬 Video Provider Comparison: {style}")
         logger.info(f"   Providers: {', '.join(providers)}")

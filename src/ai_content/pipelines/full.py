@@ -231,9 +231,9 @@ class FullContentPipeline:
             await self._upload_output(result, upload_to)
 
         # Finalize
-        result.success = bool(
-            result.outputs.get("music", {}).success or result.outputs.get("video", {}).success
-        )
+        music_ok = result.outputs.get("music") and result.outputs["music"].success
+        video_ok = result.outputs.get("video") and result.outputs["video"].success
+        result.success = bool(music_ok or video_ok)
 
         logger.info("\n" + "=" * 60)
         logger.info(f"🏁 Pipeline Complete: {'✅ Success' if result.success else '❌ Failed'}")
