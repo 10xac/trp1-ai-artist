@@ -59,7 +59,7 @@ def main(
 
 @app.command()
 def music(
-    prompt: str = typer.Option(..., "--prompt", "-p", help="Music style prompt"),
+    prompt: Optional[str] = typer.Option(None, "--prompt", "-p", help="Music style prompt (required if --style not used)"),
     provider: str = typer.Option("lyria", "--provider", help="Provider: lyria, minimax"),
     style: Optional[str] = typer.Option(None, "--style", "-s", help="Preset style name"),
     duration: int = typer.Option(30, "--duration", "-d", help="Duration in seconds"),
@@ -105,6 +105,11 @@ async def _generate_music(
     import shlex
 
     tracker = get_tracker()
+
+    # Require prompt or style
+    if not prompt and not style:
+        console.print("[red]Provide --prompt or --style[/red]")
+        raise typer.Exit(1)
 
     # Apply preset if specified
     if style:
@@ -222,7 +227,7 @@ async def _generate_music(
 
 @app.command()
 def video(
-    prompt: str = typer.Option(..., "--prompt", "-p", help="Scene description"),
+    prompt: Optional[str] = typer.Option(None, "--prompt", "-p", help="Scene description (required if --style not used)"),
     provider: str = typer.Option("veo", "--provider", help="Provider: veo, kling"),
     style: Optional[str] = typer.Option(None, "--style", "-s", help="Preset style name"),
     aspect: str = typer.Option("16:9", "--aspect", "-a", help="Aspect ratio"),
@@ -245,7 +250,7 @@ def video(
 
 
 async def _generate_video(
-    prompt: str,
+    prompt: Optional[str],
     provider: str,
     style: Optional[str],
     aspect: str,
@@ -254,6 +259,11 @@ async def _generate_video(
     output: Optional[Path],
 ):
     """Async video generation."""
+    # Require prompt or style
+    if not prompt and not style:
+        console.print("[red]Provide --prompt or --style[/red]")
+        raise typer.Exit(1)
+
     # Apply preset if specified
     if style:
         try:

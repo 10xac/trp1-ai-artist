@@ -102,7 +102,7 @@ async def demo_custom_provider():
 
     # List all registered providers (including our custom one)
     print("\n📋 Registered Music Providers:")
-    for name in ProviderRegistry.list_music():
+    for name in ProviderRegistry.list_music_providers():
         print(f"   • {name}")
 
     # Use our custom provider
